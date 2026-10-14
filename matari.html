@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جستجوی المطري در اینستاگرام</title>
+<style>
+body {
+  background: #101010;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  direction: rtl;
+  padding: 18px;
+}
+h2 { color: #ff4b91; }
+input, button {
+  padding: 12px;
+  margin: 6px;
+  border: 0;
+  border-radius: 9px;
+}
+input { width: 80%; max-width: 350px; }
+button {
+  background: #d62976;
+  color: white;
+  cursor: pointer;
+}
+a {
+  display: block;
+  background: #242424;
+  color: white;
+  text-decoration: none;
+  margin: 8px auto;
+  padding: 13px;
+  border-radius: 10px;
+  max-width: 400px;
+}
+#count { color: #ff8abd; }
+</style>
+</head>
+<body>
+
+<h2>جستجوی المطري</h2>
+<p>۸۰۰ عبارت به عربی، فارسی و انگلیسی</p>
+<p id="count"></p>
+
+<input id="search" placeholder="نام یا عبارت را بنویس">
+<button onclick="makeSearch()">فیلتر</button>
+<button onclick="showAll()">نمایش همه</button>
+
+<div id="results"></div>
+
+<script>
+const profile = "https://instagram.com/yousef__almatari";
+
+const names = [
+"بنيامين المطري",
+"يوسف المطري",
+"المطري",
+"بنيامين",
+"يوسف",
+"بنیامین المطری",
+"یوسف المطری",
+"المطری",
+"بنیامین",
+"یوسف",
+"Benjamin Al-Mutairi",
+"Yousef Al-Mutairi",
+"Yusuf Al-Mutairi",
+"Benjamin",
+"Yousef",
+"Yusuf",
+"Benjamin Al Mutairi",
+"Yousef Al Matari",
+"Benjamin Almatari",
+"Yousef Almatari"
+];
+
+const words = [
+"حساب","رسمي","شخصي","صور","فيديو","أخبار",
+"معلومات","بحث","اسم","ملف","صفحة","إنستغرام",
+"جديد","مشهور","عربي","العراق","الحساب الرسمي",
+"اکانت","رسمی","شخصی","عکس","ویدیو","اخبار",
+"اطلاعات","جستجو","نام","پروفایل","صفحه","اینستاگرام",
+"جدید","عراقی","مشهور","پیج","آیدی",
+"official","profile","account","photos","videos",
+"news","information","search","username","Instagram",
+"page","personal","Iraq","Iraqi","Arabic","popular",
+"real account","latest","social media","find",
+"official account","public profile","name search",
+"Arabic name","Persian name","Instagram profile",
+"real profile","social account","user profile"
+];
+
+const results = document.getElementById("results");
+const count = document.getElementById("count");
+const all = new Set();
+
+for (const name of names) {
+  all.add(name);
+
+  for (const word of words) {
+    all.add(name + " " + word);
+    all.add(word + " " + name);
+  }
+}
+
+// ساخت دقیقاً ۸۰۰ عبارت یکتا
+let i = 1;
+while (all.size < 800) {
+  const name = names[i % names.length];
+  const word = words[Math.floor(i / names.length) % words.length];
+  all.add(name + " " + word + " " + i);
+  i++;
+}
+
+const unique = [...all].slice(0, 800);
+
+function show(list) {
+  results.innerHTML = "";
+  count.textContent = "نمایش " + list.length + " عبارت";
+
+  const fragment = document.createDocumentFragment();
+
+  list.forEach(term => {
+    const a = document.createElement("a");
+    a.href = profile;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = term;
+    fragment.appendChild(a);
+  });
+
+  results.appendChild(fragment);
+}
+
+function makeSearch() {
+  const q = document.getElementById("search")
+    .value.trim().toLowerCase();
+
+  show(unique.filter(term =>
+    term.toLowerCase().includes(q)
+  ));
+}
+
+function showAll() {
+  document.getElementById("search").value = "";
+  show(unique);
+}
+
+show(unique);
+</script>
+
+</body>
+</html>
